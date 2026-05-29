@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DisertanteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -38,19 +40,33 @@ class Disertante
     #[ORM\Column(length: 255)]
     private ?string $linkedin = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $direccion = null;
+
+    /**
+     * @var Collection<int, Evento>
+     */
+    #[ORM\ManyToMany(targetEntity: Evento::class, mappedBy: 'disertante')]
+    private Collection $eventos;
+
+    public function __construct()
+    {
+        $this->eventos = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getNombres(): ?string
+    public function getNombre(): ?string
     {
         return $this->nombre;
     }
 
-    public function setNombres(string $nombre): static
+    public function setNombre(string $nombre): static
     {
-        $this->nombres = $nombre;
+        $this->nombre = $nombre;
 
         return $this;
     }
@@ -137,5 +153,54 @@ class Disertante
         $this->linkedin = $linkedin;
 
         return $this;
+    }
+
+    public function getDireccion(): ?string
+    {
+        return $this->direccion;
+    }
+
+    public function setDireccion(?string $direccion): static
+    {
+        $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Evento>
+     */
+    public function getEventos(): Collection
+    {
+        return $this->eventos;
+    }
+
+    public function addEvento(Evento $evento): static
+    {
+        if (!$this->eventos->contains($evento)) {
+            $this->eventos->add($evento);
+            $evento->addDisertante($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvento(Evento $evento): static
+    {
+        if ($this->eventos->removeElement($evento)) {
+            $evento->removeDisertante($this);
+        }
+
+        return $this;
+    }
+
+    public function getNombreCompleto(): string
+    {
+        return $this->nombre . ' ' . $this->apellido;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getNombreCompleto();
     }
 }

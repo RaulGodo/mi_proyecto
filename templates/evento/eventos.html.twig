@@ -1,0 +1,49 @@
+<h1>Eventos</h1>
+
+{% for evento in eventos %}
+
+<div>
+
+    <strong>
+        {{ evento.hora|date('H:i') }}
+        -
+        {{ evento.horaFinalizacion|date('H:i') }}
+    </strong>
+
+    <br>
+
+    <a href="{{ path('evento_detalle', {'slug': evento.slug}) }}">
+        {{ evento.titulo }}
+    </a>
+
+    <p>{{ evento.descripcion }}</p>
+
+</div>
+
+{% endfor %}
+
+<h1>{{ evento.titulo }}</h1>
+
+<p>{{ evento.descripcion }}</p>
+
+<div>
+    <strong>Fecha:</strong>
+    {{ evento.fecha|date('d/m/Y') }}
+</div>
+
+<div>
+    <strong>Hora:</strong>
+    {{ evento.hora|date('H:i') }}
+    -
+    {{ evento.horaFinalizacion|date('H:i') }}
+</div>
+
+<div>
+    <strong>Idioma:</strong>
+    {{ evento.idioma }}
+</div>
+
+<div>
+    <strong>Disertante:</strong>
+    {{ evento.disertante }}
+</div>

@@ -125,7 +125,7 @@ class AppFixtures extends Fixture
             $disertante = new Disertante();
 
             $disertante->setNombre($datos['nombre']);
-            $disertante->setApellidos($datos['apellidos']);
+            $disertante->setApellido($datos['apellidos']);
             $disertante->setEmail($datos['email']);
 
             $disertante->setBiografia(
@@ -170,7 +170,7 @@ class AppFixtures extends Fixture
                 $nombres[array_rand($nombres)]
             );
 
-            $usuario->setApellidos(
+            $usuario->setApellido(
                 $apellidos[array_rand($apellidos)]
             );
 
@@ -192,12 +192,12 @@ class AppFixtures extends Fixture
 
             $passwordPlano = 'usuario' . $i;
 
-            $passwordHash = $this->passwordHasher->hashPassword(
-                $usuario,
-                $passwordPlano
-            );
+            // $passwordHash = $this->passwordHasher->hashPassword(
+            //     $usuario,
+            //     $passwordPlano
+            // );
 
-            $usuario->setPassword($passwordHash);
+            // $usuario->setPassword($passwordHash);
 
             $manager->persist($usuario);
         }
@@ -236,6 +236,31 @@ class AppFixtures extends Fixture
                 'hora' => '16:30:00',
                 'disertante' => 'javierLopez'
             ],
+            [
+                'titulo' => 'Introducción a Symfony 8.4',
+                'hora' => '09:00:00',
+                'disertante' => 'javierLopez'
+            ],
+            [
+                'titulo' => 'Ruteo y programacion',
+                'hora' => '10:30:00',
+                'disertante' => 'ignacioBlanco'
+            ],
+            [
+                'titulo' => 'Doctrine ORM y Base de Datos 2',
+                'hora' => '12:00:00',
+                'disertante' => 'marcosRojas'
+            ],
+            [
+                'titulo' => 'Twig y Formularios 5',
+                'hora' => '15:00:00',
+                'disertante' => 'antonelaToledo'
+            ],
+            [
+                'titulo' => 'Seguridad en Symfony 10',
+                'hora' => '16:30:00',
+                'disertante' => 'javierLopez'
+            ],
         ];
 
         foreach ($eventos as $datosEvento) {
@@ -262,10 +287,10 @@ class AppFixtures extends Fixture
 
             $evento->setIdioma('es');
 
-            $evento->setDisertante(
-                $this->getReference(
-                    $datosEvento['disertante'],
-                    Disertante::class
+            $evento->addDisertante(
+            $this->getReference(
+                $datosEvento['disertante'],
+                Disertante::class
                 )
             );
 

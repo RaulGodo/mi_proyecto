@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UsuarioRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UsuarioRepository::class)]
@@ -31,8 +33,19 @@ class Usuario
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable:true)]
     private ?string $password = null;
+
+    /**
+     * @var Collection<int, Evento>
+     */
+    #[ORM\ManyToMany(targetEntity: Evento::class, inversedBy: 'usuarios')]
+    private Collection $evento;
+
+    public function __construct()
+    {
+        $this->evento = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -119,6 +132,30 @@ class Usuario
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Evento>
+     */
+    public function getEvento(): Collection
+    {
+        return $this->evento;
+    }
+
+    public function addEvento(Evento $evento): static
+    {
+        if (!$this->evento->contains($evento)) {
+            $this->evento->add($evento);
+        }
+
+        return $this;
+    }
+
+    public function removeEvento(Evento $evento): static
+    {
+        $this->evento->removeElement($evento);
 
         return $this;
     }
