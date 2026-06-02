@@ -18,7 +18,7 @@ final class EventoController extends AbstractController
         ]);
     }
 
-    #[Route('/evento/{slug}', name: 'evento_detalle')]
+    #[Route('/evento/{slug}', name: 'app_evento_detalle')]
     public function evento(
         string $slug,
         EventoRepository $repository

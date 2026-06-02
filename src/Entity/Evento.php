@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use app\Common\Util;
+use App\Common\Util;
 
 #[ORM\Entity(repositoryClass: EventoRepository::class)]
 class Evento
@@ -69,7 +69,7 @@ class Evento
     public function setTitulo(string $titulo): static
     {
         $this->titulo = $titulo;
-        $this->setSlug($titulo);
+        $this->setSlug(util::slugify($titulo));
 
         return $this;
     }
