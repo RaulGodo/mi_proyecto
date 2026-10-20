@@ -1,6 +1,14 @@
+{% extends 'frontend/layout.html.twig' %}
+
+{% block title %}
+    {{ disertante.nombreCompleto }}
+{% endblock %}
+
+{% block contenido %}
+
 <h1>{{ disertante.nombreCompleto }}</h1>
 
-<p>{{ disertante.biografia }}</p>
+<p>{{ disertante.biografia|raw }}</p>
 
 <p>
     <strong>Teléfono:</strong>
@@ -9,7 +17,9 @@
 
 <p>
     <strong>Página:</strong>
-    {{ disertante.url }}
+    <a href="{{ disertante.url }}" target="_blank" rel="noopener">
+        {{ disertante.url }}
+    </a>
 </p>
 
 <p>
@@ -21,13 +31,9 @@
 {% for evento in disertante.eventos %}
 
     <li>
-
-        <a href="{{ path('app_evento_detalle', {
-            'slug': evento.slug
-        }) }}">
+        <a href="{{ path('app_evento_detalle', {'slug': evento.slug}) }}">
             {{ evento.titulo }}
         </a>
-
     </li>
 
 {% else %}
@@ -37,3 +43,5 @@
 {% endfor %}
 
 </ul>
+
+{% endblock %}

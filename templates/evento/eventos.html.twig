@@ -1,8 +1,16 @@
-<h1>Eventos</h1>
+{% extends 'frontend/layout.html.twig' %}
+
+{% block title %}
+    Eventos
+{% endblock %}
+
+{% block contenido %}
+
+<h2>Listado de Eventos</h2>
 
 {% for evento in eventos %}
 
-<div>
+<div class="mb-4">
 
     <strong>
         {{ evento.hora|date('H:i') }}
@@ -13,12 +21,19 @@
     <br>
 
     <a href="{{ path('app_evento_detalle', {'slug': evento.slug}) }}">
-        {{ evento.titulo }}
+        {{ evento.titulo|title }}
     </a>
 
-    <p>{{ evento.descripcion }}</p>
+    <p>
+        {{ evento.descripcion|slice(0,150) }}...
+    </p>
 
 </div>
 
+{% else %}
+
+    <p>No hay eventos disponibles.</p>
+
 {% endfor %}
 
+{% endblock %}

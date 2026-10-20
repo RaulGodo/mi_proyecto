@@ -440,6 +440,14 @@ class AppFixtures extends Fixture
                 )
             );
 
+            $evento->setEstado(
+                match (rand(1, 3)) {
+                    1 => 'Activo',
+                    2 => 'Cancelado',
+                    3 => 'Finalizado'
+                }
+            );
+
             $this->addUsuarios(
                 $manager,
                 $evento

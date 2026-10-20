@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+
+<div class="container mt-3">
+
+    <h1>Sistema de Gestión de Eventos</h1>
+
+    <nav class="mb-3">
+
+        <a href="{{ path('app_portada') }}">Inicio</a> |
+
+        <a href="{{ path('app_evento') }}">Eventos</a> |
+
+        <a href="{{ path('app_disertantes') }}">Disertantes</a>
+
+    </nav>
+
+    <hr>
+
+</div>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    <section>
+        {% block contenido %}{% endblock %}
+    </section>
+
+    <aside class="mt-4">
+        {% block lateral %}
+            <h4>Barra lateral</h4>
+            <p>Aquí podremos mostrar información adicional.</p>
+        {% endblock %}
+    </aside>
+
+</div>
+
+{% endblock %}

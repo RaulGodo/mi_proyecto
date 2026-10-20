@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+
+<div class="container mt-3">
+
+    <h1>Panel de Administración</h1>
+
+    <nav class="mb-3">
+
+        <a href="{{ path('admin_evento_listar') }}">Eventos</a> |
+
+        <a href="{{ path('app_portada') }}">Volver al sitio</a>
+
+    </nav>
+
+    <hr>
+
+</div>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% block contenido_admin %}{% endblock %}
+
+</div>
+
+{% endblock %}

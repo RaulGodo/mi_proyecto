@@ -35,6 +35,9 @@ class Evento
     #[ORM\Column(length: 255)]
     private ?string $idioma = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $estado = null;
+
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
@@ -130,6 +133,18 @@ class Evento
     public function setIdioma(string $idioma): static
     {
         $this->idioma = $idioma;
+
+        return $this;
+    }
+
+    public function getEstado(): ?string
+    {
+        return $this->estado;
+    }
+
+    public function setEstado(string $estado): static
+    {
+        $this->estado = $estado;
 
         return $this;
     }
