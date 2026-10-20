@@ -22,26 +22,32 @@ class Disertante
     #[ORM\Column(length: 255)]
     private ?string $apellido = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $biografia = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $telefono = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $url = null;
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $twitter = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $linkedin = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $direccion = null;
+
+    #[ORM\Column(length: 150, nullable: true)]
+    private ?string $especialidad = null;
+
+    #[ORM\Column(options: ['default' => true])]
+    private bool $activo = true;
 
     /**
      * @var Collection<int, Evento>
@@ -88,7 +94,7 @@ class Disertante
         return $this->biografia;
     }
 
-    public function setBiografia(string $biografia): static
+    public function setBiografia(?string $biografia): static
     {
         $this->biografia = $biografia;
 
@@ -100,7 +106,7 @@ class Disertante
         return $this->telefono;
     }
 
-    public function setTelefono(string $telefono): static
+    public function setTelefono(?string $telefono): static
     {
         $this->telefono = $telefono;
 
@@ -112,7 +118,7 @@ class Disertante
         return $this->url;
     }
 
-    public function setUrl(string $url): static
+    public function setUrl(?string $url): static
     {
         $this->url = $url;
 
@@ -136,7 +142,7 @@ class Disertante
         return $this->twitter;
     }
 
-    public function setTwitter(string $twitter): static
+    public function setTwitter(?string $twitter): static
     {
         $this->twitter = $twitter;
 
@@ -148,7 +154,7 @@ class Disertante
         return $this->linkedin;
     }
 
-    public function setLinkedin(string $linkedin): static
+    public function setLinkedin(?string $linkedin): static
     {
         $this->linkedin = $linkedin;
 
@@ -163,6 +169,30 @@ class Disertante
     public function setDireccion(?string $direccion): static
     {
         $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    public function getEspecialidad(): ?string
+    {
+        return $this->especialidad;
+    }
+
+    public function setEspecialidad(?string $especialidad): static
+    {
+        $this->especialidad = $especialidad;
+
+        return $this;
+    }
+
+    public function isActivo(): bool
+    {
+        return $this->activo;
+    }
+
+    public function setActivo(bool $activo): static
+    {
+        $this->activo = $activo;
 
         return $this;
     }
