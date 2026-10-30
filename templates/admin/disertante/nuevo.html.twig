@@ -1,0 +1,15 @@
+{% extends 'admin/evento/layout-admin.html.twig' %}
+
+{% block title %}Nuevo disertante{% endblock %}
+
+{% block contenido_admin %}
+<div class="mt-4">
+    <h1>Nuevo disertante</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+        <a href="{{ path('admin_disertante_listar') }}" class="btn btn-secondary mt-3">Cancelar</a>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

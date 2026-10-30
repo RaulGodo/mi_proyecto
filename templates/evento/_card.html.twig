@@ -1,0 +1,13 @@
+<article class="mb-4">
+
+    <h4>
+        <a href="{{ path('app_evento_detalle', {'slug': evento.slug}) }}">
+            {{ evento.titulo|title }}
+        </a>
+    </h4>
+
+    <p>
+        {{ evento.descripcion|slice(0,150) }}...
+    </p>
+
+</article>

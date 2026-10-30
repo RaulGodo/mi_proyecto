@@ -1,0 +1,64 @@
+{% extends 'frontend/layout.html.twig' %}
+
+{% block title %}
+    Inicio
+{% endblock %}
+
+{% block contenido %}
+
+{% for mensaje in app.flashes('info') %}
+    <div class="alert alert-info">
+        {{ mensaje }}
+    </div>
+{% endfor %}
+
+
+    <h2>Symfony 7.4 - Eventos</h2>
+
+    <div class="row">
+
+        <div class="col">
+
+            {% for evento in eventosCol1 %}
+
+                {% include 'evento/_card.html.twig' with {
+                    evento: evento
+                } %}
+
+            {% else %}
+
+                <p>No hay eventos.</p>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="col">
+
+            {% for evento in eventosCol2 %}
+
+                {% include 'evento/_card.html.twig' with {
+                    evento: evento
+                } %}
+
+            {% else %}
+
+                <p>No hay eventos.</p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block lateral %}
+
+    <h4>Próximos eventos</h4>
+
+    <p>Consultá el calendario completo de actividades.</p>
+
+    {{ parent() }}
+
+{% endblock %}
