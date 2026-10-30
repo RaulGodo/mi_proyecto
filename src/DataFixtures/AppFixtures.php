@@ -421,6 +421,8 @@ class AppFixtures extends Fixture
                 'Evento académico orientado al desarrollo de aplicaciones web modernas utilizando Symfony 7.4.'
             );
 
+            $evento->setCapacidad(100);
+
             $evento->setFecha(
                 new \DateTime('2026-06-10')
             );
