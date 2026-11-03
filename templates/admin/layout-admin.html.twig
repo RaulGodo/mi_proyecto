@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+
+            <a class="navbar-brand"
+               href="{{ path('admin_evento_listar') }}">
+                Administración de Eventos
+            </a>
+
+<div class="navbar-nav flex-row flex-wrap align-items-center gap-3">
+                <a class="nav-link"
+                   href="{{ path('app_portada') }}">
+                    Sitio público
+                </a>
+
+                <a class="nav-link"
+                   href="{{ path('admin_evento_listar') }}">
+                    Eventos
+                </a>
+
+                <a class="nav-link"
+                   href="{{ path('app_admin_disertante_index') }}">
+                    Disertantes
+                </a>
+                {% if app.user %}
+              <span class="navbar-text text-white small">
+        {{ app.user.userIdentifier }}
+    </span>
+        {% endif %}
+            <a href="{{ path('app_logout') }}"
+                class="btn btn-danger btn-sm ms-lg-3">
+                 Cerrar sesión
+                    </a>
+            </div>
+
+        </div>
+    </nav>
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-4 mb-5">
+
+        {% block contenido %}{% endblock %}
+
+    </div>
+
+{% endblock %}

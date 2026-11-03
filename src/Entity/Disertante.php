@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+
 
 #[ORM\Entity(repositoryClass: DisertanteRepository::class)]
 class Disertante
@@ -16,14 +19,25 @@ class Disertante
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(
+        message: 'El nombre del disertante es obligatorio.'
+    )]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'El nombre no puede superar los {{ limit }} caracteres.'
+    )]
     private ?string $nombre = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(
+        message: 'El apellido del disertante es obligatorio.'
+    )]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'El apellido no puede superar los {{ limit }} caracteres.'
+    )]
     private ?string $apellido = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $biografia = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $telefono = null;
@@ -31,7 +45,17 @@ class Disertante
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $url = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 180)]
+    #[Assert\NotBlank(
+        message: 'El correo electrónico es obligatorio.'
+    )]
+    #[Assert\Email(
+        message: 'Ingresá una dirección de correo electrónico válida.'
+    )]
+    #[Assert\Length(
+        max: 180,
+        maxMessage: 'El correo no puede superar los {{ limit }} caracteres.'
+    )]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -40,20 +64,27 @@ class Disertante
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $linkedin = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $direccion = null;
-
-    #[ORM\Column(length: 150, nullable: true)]
-    private ?string $especialidad = null;
-
-    #[ORM\Column(options: ['default' => true])]
-    private bool $activo = true;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $biografia = null;
 
     /**
      * @var Collection<int, Evento>
      */
-    #[ORM\ManyToMany(targetEntity: Evento::class, mappedBy: 'disertante')]
+    #[ORM\OneToMany(targetEntity: Evento::class, mappedBy: 'disertante')]
     private Collection $eventos;
+
+    #[ORM\Column(length: 150, nullable: true)]
+    #[Assert\NotBlank(
+        message: 'La especialidad del disertante es obligatoria.'
+    )]
+    #[Assert\Length(
+        max: 150,
+        maxMessage: 'La especialidad no puede superar los {{ limit }} caracteres.'
+    )]
+    private ?string $especialidad = null;
+
+    #[ORM\Column]
+    private ?bool $activo = true;
 
     public function __construct()
     {
@@ -85,18 +116,6 @@ class Disertante
     public function setApellido(string $apellido): static
     {
         $this->apellido = $apellido;
-
-        return $this;
-    }
-
-    public function getBiografia(): ?string
-    {
-        return $this->biografia;
-    }
-
-    public function setBiografia(?string $biografia): static
-    {
-        $this->biografia = $biografia;
 
         return $this;
     }
@@ -148,7 +167,6 @@ class Disertante
 
         return $this;
     }
-
     public function getLinkedin(): ?string
     {
         return $this->linkedin;
@@ -161,38 +179,14 @@ class Disertante
         return $this;
     }
 
-    public function getDireccion(): ?string
+    public function getBiografia(): ?string
     {
-        return $this->direccion;
+        return $this->biografia;
     }
 
-    public function setDireccion(?string $direccion): static
+    public function setBiografia(?string $biografia): static
     {
-        $this->direccion = $direccion;
-
-        return $this;
-    }
-
-    public function getEspecialidad(): ?string
-    {
-        return $this->especialidad;
-    }
-
-    public function setEspecialidad(?string $especialidad): static
-    {
-        $this->especialidad = $especialidad;
-
-        return $this;
-    }
-
-    public function isActivo(): bool
-    {
-        return $this->activo;
-    }
-
-    public function setActivo(bool $activo): static
-    {
-        $this->activo = $activo;
+        $this->biografia = $biografia;
 
         return $this;
     }
@@ -209,7 +203,7 @@ class Disertante
     {
         if (!$this->eventos->contains($evento)) {
             $this->eventos->add($evento);
-            $evento->addDisertante($this);
+            $evento->setDisertante($this);
         }
 
         return $this;
@@ -218,19 +212,44 @@ class Disertante
     public function removeEvento(Evento $evento): static
     {
         if ($this->eventos->removeElement($evento)) {
-            $evento->removeDisertante($this);
+            if ($evento->getDisertante() === $this) {
+                $evento->setDisertante(null);
+            }
         }
 
         return $this;
     }
-
     public function getNombreCompleto(): string
     {
-        return $this->nombre . ' ' . $this->apellido;
+        return trim(($this->nombre ?? '') . ' ' . ($this->apellido ?? ''));
     }
 
     public function __toString(): string
     {
         return $this->getNombreCompleto();
+    }
+
+    public function getEspecialidad(): ?string
+    {
+        return $this->especialidad;
+    }
+
+    public function setEspecialidad(?string $especialidad): static
+    {
+        $this->especialidad = $especialidad;
+
+        return $this;
+    }
+
+    public function isActivo(): ?bool
+    {
+        return $this->activo;
+    }
+
+    public function setActivo(bool $activo): static
+    {
+        $this->activo = $activo;
+
+        return $this;
     }
 }

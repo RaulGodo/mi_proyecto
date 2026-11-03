@@ -2,32 +2,24 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\DisertanteRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Repository\DisertanteRepository;
 
-final class DisertanteController extends AbstractController
+class DisertanteController extends AbstractBaseController
 {
     #[Route('/disertantes', name: 'app_disertantes')]
     public function disertantes(
         DisertanteRepository $repository
     ): Response {
-        $disertantes = $repository
-            ->findDisertantesAlfabeticamente();
+        $disertantes = $repository->findDisertantesAlfabeticamente();
 
-        return $this->render(
-            'disertante/disertantes.html.twig',
-            [
-                'disertantes' => $disertantes
-            ]
-        );
+        return $this->render('disertante/disertantes.html.twig', [
+            'disertantes' => $disertantes,
+        ]);
     }
 
-    #[Route(
-        '/disertante/{id}',
-        name: 'app_disertante_detalle'
-    )]
+    #[Route('/disertante/{id}', name: 'app_disertante_detalle')]
     public function disertante(
         int $id,
         DisertanteRepository $repository
@@ -40,11 +32,8 @@ final class DisertanteController extends AbstractController
             );
         }
 
-        return $this->render(
-            'disertante/disertante.html.twig',
-            [
-                'disertante' => $disertante
-            ]
-        );
+        return $this->render('disertante/disertante.html.twig', [
+            'disertante' => $disertante,
+        ]);
     }
 }

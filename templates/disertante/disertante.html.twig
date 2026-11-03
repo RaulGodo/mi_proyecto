@@ -1,47 +1,86 @@
 {% extends 'frontend/layout.html.twig' %}
 
-{% block title %}
-    {{ disertante.nombreCompleto }}
-{% endblock %}
+{% block title %}{{ disertante.nombreCompleto }}{% endblock %}
 
 {% block contenido %}
 
-<h1>{{ disertante.nombreCompleto }}</h1>
+    <section class="py-4">
 
-<p>{{ disertante.biografia|raw }}</p>
-
-<p>
-    <strong>Teléfono:</strong>
-    {{ disertante.telefono }}
-</p>
-
-<p>
-    <strong>Página:</strong>
-    <a href="{{ disertante.url }}" target="_blank" rel="noopener">
-        {{ disertante.url }}
-    </a>
-</p>
-
-<p>
-    <strong>Imparte los siguientes eventos:</strong>
-</p>
-
-<ul>
-
-{% for evento in disertante.eventos %}
-
-    <li>
-        <a href="{{ path('app_evento_detalle', {'slug': evento.slug}) }}">
-            {{ evento.titulo }}
+        <a href="{{ path('app_disertantes') }}"
+           class="btn btn-outline-secondary mb-4">
+            ← Volver a disertantes
         </a>
-    </li>
 
-{% else %}
+        <div class="card shadow-sm border-0">
 
-    <li>No posee eventos asignados</li>
+            <div class="card-body p-4">
 
-{% endfor %}
+                <span class="badge bg-primary mb-3">
+                    Disertante
+                </span>
 
-</ul>
+                <h1 class="mb-2">
+                    {{ disertante.nombreCompleto }}
+                </h1>
+
+                <p class="text-secondary fs-5 mb-4">
+                    {{ disertante.especialidad ?: 'Sin especialidad' }}
+                </p>
+
+                <h2 class="h5">Biografía</h2>
+
+                <p class="text-secondary">
+                    {{ disertante.biografia ?: 'Biografía no disponible.' }}
+                </p>
+
+                <hr>
+
+                <h2 class="h5 mb-3">Información de contacto</h2>
+
+                <p>
+                    <strong>Teléfono:</strong>
+                    {{ disertante.telefono ?: 'No informado' }}
+                </p>
+
+                <p>
+                    <strong>Correo electrónico:</strong>
+                    {{ disertante.email }}
+                </p>
+
+                <p>
+                    <strong>Página web:</strong>
+                    {{ disertante.url ?: 'No informada' }}
+                </p>
+
+                <hr>
+
+                <h2 class="h5 mb-3">Eventos que imparte</h2>
+
+                <ul class="list-group list-group-flush">
+
+                    {% for evento in disertante.eventos %}
+
+                        <li class="list-group-item px-0">
+                            <a href="{{ path('app_evento_detalle', {
+                                'slug': evento.slug
+                            }) }}">
+                                {{ evento.titulo }}
+                            </a>
+                        </li>
+
+                    {% else %}
+
+                        <li class="list-group-item px-0 text-muted">
+                            No posee eventos asignados.
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+        </div>
+
+    </section>
 
 {% endblock %}

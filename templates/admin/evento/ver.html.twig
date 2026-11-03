@@ -1,0 +1,82 @@
+{% extends 'admin/layout-admin.html.twig' %}
+
+{% block title %}
+    Detalle del evento
+{% endblock %}
+
+{% block contenido %}
+
+    <h1 class="mb-4">Detalle del evento</h1>
+
+    <div class="card">
+
+        <div class="card-header bg-primary text-white">
+            <h2 class="h4 mb-0">
+                {{ evento.titulo }}
+            </h2>
+        </div>
+
+        <div class="card-body">
+
+            <p>
+                <strong>Idioma:</strong>
+                {{ evento.idioma }}
+            </p>
+
+            <p>
+                <strong>Fecha:</strong>
+                {{ evento.fecha|date('d/m/Y') }}
+            </p>
+
+            <p>
+                <strong>Hora de inicio:</strong>
+                {{ evento.hora|date('H:i') }}
+            </p>
+
+            <p>
+                <strong>Hora de finalización:</strong>
+                {{ evento.horaFinalizacion|date('H:i') }}
+            </p>
+
+            <p>
+                <strong>Duración:</strong>
+                {{ evento.duracion }} minutos
+            </p>
+
+            <p>
+                <strong>Capacidad:</strong>
+                {{ evento.capacidad }} personas
+            </p>
+
+            <p>
+                <strong>Inscriptos:</strong>
+                {{ evento.usuarios|length }}
+            </p>
+
+            <p>
+                <strong>Disertante:</strong>
+                {% if evento.disertante %}
+                    {{ evento.disertante }}
+                {% else %}
+                    Sin disertante asignado
+                {% endif %}
+            </p>
+
+            <hr>
+
+            <h3 class="h5">Descripción</h3>
+
+            <p>{{ evento.descripcion }}</p>
+
+        </div>
+
+    </div>
+
+    <div class="mt-4">
+        <a href="{{ path('admin_evento_listar') }}"
+           class="btn btn-secondary">
+            Volver al listado
+        </a>
+    </div>
+
+{% endblock %}

@@ -4,47 +4,83 @@
 
 {% block body %}
 
-<div class="container mt-5">
+<div class="container py-5">
 
     <div class="row justify-content-center">
-        <div class="col-md-5">
 
-            <div class="card shadow">
-                <div class="card-body">
+        <div class="col-12 col-md-6 col-lg-5">
 
-                    <h3 class="text-center mb-4">
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+                    <h1 class="h3 text-center mb-2">
                         Gestión de Eventos
-                    </h3>
+                    </h1>
 
-                    <h5 class="text-center">
+                    <p class="text-center text-secondary mb-4">
                         Ingreso Administrador
-                    </h5>
+                    </p>
 
                     {% if error %}
-    <div class="alert alert-danger">
-        {{ error.messageKey|trans(error.messageData, 'security') }}
-    </div>
-{% endif %}
+                        <div class="alert alert-danger">
+                            Credenciales incorrectas.
+                        </div>
+                    {% endif %}
 
-                    <form method="post">
+                    {% if app.user %}
+                        <div class="alert alert-info">
+                            Sesión iniciada como
+                            <strong>{{ app.user.userIdentifier }}</strong>.
 
-                        <label>Email</label>
-                        <input
-                            type="email"
-                            name="_username"
-                            value="{{ last_username }}"
-                            class="form-control mb-3"
-                            required
-                            autofocus
-                        >
+                            <a href="{{ path('app_logout') }}">
+                                Cerrar sesión
+                            </a>
+                        </div>
+                    {% endif %}
 
-                        <label>Contraseña</label>
-                        <input
-                            type="password"
-                            name="_password"
-                            class="form-control mb-3"
-                            required
-                        >
+                    <form method="post"
+                          action="{{ path('app_login') }}">
+
+                        <div class="mb-3">
+
+                            <label for="username"
+                                   class="form-label">
+                                Correo electrónico
+                            </label>
+
+                            <input
+                                type="email"
+                                name="_username"
+                                id="username"
+                                value="{{ last_username }}"
+                                class="form-control"
+                                placeholder="admin@eventos.com"
+                                autocomplete="email"
+                                required
+                                autofocus
+                            >
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label for="password"
+                                   class="form-label">
+                                Contraseña
+                            </label>
+
+                            <input
+                                type="password"
+                                name="_password"
+                                id="password"
+                                class="form-control"
+                                placeholder="Ingresá tu contraseña"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                        </div>
 
                         <input
                             type="hidden"
@@ -60,10 +96,21 @@
 
                     </form>
 
+                    <div class="text-center mt-4">
+
+                        <a href="{{ path('app_portada') }}"
+                           class="text-decoration-none">
+                            ← Volver al inicio
+                        </a>
+
+                    </div>
+
                 </div>
+
             </div>
 
         </div>
+
     </div>
 
 </div>

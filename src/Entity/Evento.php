@@ -2,14 +2,22 @@
 
 namespace App\Entity;
 
+use App\Common\Util;
 use App\Repository\EventoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Common\Util;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 #[ORM\Entity(repositoryClass: EventoRepository::class)]
+#[UniqueEntity(
+    fields: ['slug'],
+    message: 'Ya existe un evento con ese título.',
+    errorPath: 'titulo'
+)]
 class Evento
 {
     #[ORM\Id]
@@ -18,47 +26,73 @@ class Evento
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(
+        message: 'El título del evento es obligatorio.'
+    )]
+    #[Assert\Length(
+        min: 5,
+        max: 255,
+        minMessage: 'El título debe tener al menos {{ limit }} caracteres.',
+        maxMessage: 'El título no puede superar los {{ limit }} caracteres.'
+    )]
     private ?string $titulo = null;
 
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $slug = null;
+
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(
+        message: 'Debe ingresar el idioma del evento.'
+    )]
+    private ?string $idioma = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(
+        message: 'Debe ingresar una descripción del evento.'
+    )]
     private ?string $descripcion = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotNull(
+        message: 'Debe ingresar la fecha del evento.'
+    )]
     private ?\DateTime $fecha = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Assert\NotNull(
+        message: 'Debe ingresar la hora del evento.'
+    )]
     private ?\DateTime $hora = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(
+        message: 'Debe ingresar la duración del evento.'
+    )]
+    #[Assert\Positive(
+        message: 'La duración debe ser mayor que cero.'
+    )]
     private ?int $duracion = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $idioma = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $estado = null;
-
-    #[ORM\Column]
-    private ?int $capacidad = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $slug = null;
-
-    /**
-     * @var Collection<int, Disertante>
-     */
-    #[ORM\ManyToMany(targetEntity: Disertante::class, inversedBy: 'eventos')]
-    private Collection $disertante;
+    #[ORM\ManyToOne(inversedBy: 'eventos')]
+    private ?Disertante $disertante = null;
 
     /**
      * @var Collection<int, Usuario>
      */
-    #[ORM\ManyToMany(targetEntity: Usuario::class, mappedBy: 'evento')]
+    #[ORM\ManyToMany(targetEntity: Usuario::class, inversedBy: 'eventos')]
     private Collection $usuarios;
+
+    #[ORM\Column]
+    #[Assert\NotNull(
+        message: 'Debe ingresar la capacidad del evento.'
+    )]
+    #[Assert\Positive(
+        message: 'La capacidad debe ser mayor que cero.'
+    )]
+    private ?int $capacidad = null;
 
     public function __construct()
     {
-        $this->disertante = new ArrayCollection();
         $this->usuarios = new ArrayCollection();
     }
 
@@ -75,7 +109,32 @@ class Evento
     public function setTitulo(string $titulo): static
     {
         $this->titulo = $titulo;
-        $this->setSlug(util::slugify($titulo));
+
+        $this->slug = Util::slugify($titulo);
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getIdioma(): ?string
+    {
+        return $this->idioma;
+    }
+
+    public function setIdioma(string $idioma): static
+    {
+        $this->idioma = $idioma;
 
         return $this;
     }
@@ -128,74 +187,14 @@ class Evento
         return $this;
     }
 
-    public function getIdioma(): ?string
-    {
-        return $this->idioma;
-    }
-
-    public function setIdioma(string $idioma): static
-    {
-        $this->idioma = $idioma;
-
-        return $this;
-    }
-
-    public function getEstado(): ?string
-    {
-        return $this->estado;
-    }
-
-    public function setEstado(string $estado): static
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    public function getCapacidad(): ?int
-    {
-        return $this->capacidad;
-    }
-
-    public function setCapacidad(int $capacidad): static
-    {
-        $this->capacidad = $capacidad;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): static
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Disertante>
-     */
-    public function getDisertante(): Collection
+    public function getDisertante(): ?Disertante
     {
         return $this->disertante;
     }
 
-    public function addDisertante(Disertante $disertante): static
+    public function setDisertante(?Disertante $disertante): static
     {
-        if (!$this->disertante->contains($disertante)) {
-            $this->disertante->add($disertante);
-        }
-
-        return $this;
-    }
-
-    public function removeDisertante(Disertante $disertante): static
-    {
-        $this->disertante->removeElement($disertante);
+        $this->disertante = $disertante;
 
         return $this;
     }
@@ -226,7 +225,6 @@ class Evento
 
         return $this;
     }
-
     public function getHoraFinalizacion(): \DateTimeInterface
     {
         $horaFinal = clone $this->hora;
@@ -238,6 +236,18 @@ class Evento
 
     public function __toString(): string
     {
-        return $this->titulo;
+        return $this->titulo ?? '';
+    }
+
+    public function getCapacidad(): ?int
+    {
+        return $this->capacidad;
+    }
+
+    public function setCapacidad(int $capacidad): static
+    {
+        $this->capacidad = $capacidad;
+
+        return $this;
     }
 }

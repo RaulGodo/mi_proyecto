@@ -1,20 +1,16 @@
-{% extends 'admin/evento/layout-admin.html.twig' %}
+{% extends 'admin/layout-admin.html.twig' %}
 
 {% block title %}
     Gestión de Eventos
 {% endblock %}
 
-{% block contenido_admin %}
+{% block contenido %}
 
-{% for tipo, mensajes in app.flashes %}
-    {% for mensaje in mensajes %}
-        <div class="alert alert-{{ tipo }}">
+    {% for mensaje in app.flashes('success') %}
+        <div class="alert alert-success">
             {{ mensaje }}
         </div>
     {% endfor %}
-{% endfor %}
-
-<div class="mt-4">
 
     <h1>Gestión de Eventos</h1>
 
@@ -26,7 +22,6 @@
             <th>Título</th>
             <th>Idioma</th>
             <th>Inscriptos</th>
-            <th>Estado</th>
             <th>Acciones</th>
         </tr>
         </thead>
@@ -54,47 +49,56 @@
                     {{ evento.usuarios|length }}
                 </td>
 
-                <td>
-                    {% if evento.estado == 'Activo' %}
-                        <span class="badge bg-success">Activo</span>
-                    {% elseif evento.estado == 'Cancelado' %}
-                        <span class="badge bg-secondary">Cancelado</span>
-                    {% elseif evento.estado == 'Finalizado' %}
-                        <span class="badge bg-danger">Finalizado</span>
-                    {% else %}
-                        <span class="badge bg-warning">Sin estado</span>
-                    {% endif %}
-                </td>
+               <td>
+    <div class="d-flex flex-wrap gap-2 align-items-center">
 
-                <td>
+        <a href="{{ path('admin_evento_ver', {
+            'id': evento.id
+        }) }}"
+           class="btn btn-info btn-sm">
+            Ver detalle
+        </a>
 
-                    <a
-                    href="{{ path(
-                    'admin_evento_inscriptos',
-                    {id: evento.id}
-                    ) }}"
-                    class="btn btn-info btn-sm"
-                    >
-                        👥 Inscriptos
-                    </a>
+        <a href="{{ path('admin_evento_editar', {
+            'id': evento.id
+        }) }}"
+           class="btn btn-warning btn-sm">
+            Editar
+        </a>
 
-                    <a
-                    href="{{ path(
-                    'admin_evento_borrar',
-                    {id: evento.id}
-                    ) }}"
+        <a href="{{ path('admin_evento_inscriptos', {
+            'id': evento.id
+        }) }}"
+           class="btn btn-secondary btn-sm">
+            👥 Inscriptos
+        </a>
+
+        <form method="post"
+              action="{{ path('admin_evento_borrar', {
+                  'id': evento.id
+              }) }}"
+              class="m-0">
+
+            <input type="hidden"
+                   name="_token"
+                   value="{{ csrf_token('delete' ~ evento.id) }}">
+
+            <button type="submit"
                     class="btn btn-danger btn-sm"
-                    >
-                        🗑️ Borrar
-                    </a>
-                </td>
+                    onclick="return confirm('¿Está seguro de eliminar este evento?');">
+                Borrar
+            </button>
 
+        </form>
+
+    </div>
+</td>
             </tr>
 
         {% else %}
 
             <tr>
-                <td colspan="6">
+                <td colspan="5">
                     No existe ningún evento.
                 </td>
             </tr>
@@ -105,11 +109,11 @@
 
     </table>
 
-    <a href="#"
-       class="btn btn-success">
-        ➕ Nuevo Evento
-    </a>
-
-</div>
+    <a
+    href="{{ path('admin_evento_nuevo') }}"
+    class="btn btn-success"
+>
+    ➕ Nuevo Evento
+</a>
 
 {% endblock %}

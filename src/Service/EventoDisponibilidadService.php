@@ -8,7 +8,8 @@ class EventoDisponibilidadService
 {
     public function tieneCupos(Evento $evento): bool
     {
-        return $evento->getCapacidad() > 0;
+        return $evento->getUsuarios()->count()
+            < $evento->getCapacidad();
     }
 
     public function obtenerMensaje(Evento $evento): string

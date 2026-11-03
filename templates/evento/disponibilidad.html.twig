@@ -1,13 +1,66 @@
-{% extends 'base.html.twig' %}
+{% extends 'frontend/layout.html.twig' %}
 
-{% block title %}Disponibilidad - {{ evento.titulo }}{% endblock %}
+{% block title %}
+    Disponibilidad - {{ evento.titulo }}
+{% endblock %}
 
-{% block body %}
-    <h1>{{ evento.titulo }}</h1>
+{% block contenido %}
 
-    <p>{{ mensaje }}</p>
+<section class="py-4">
 
-    <p>Capacidad: {{ evento.capacidad }}</p>
+    <a href="{{ path('app_eventos') }}"
+       class="btn btn-outline-secondary mb-4">
+        ← Volver a eventos
+    </a>
 
-    <a href="{{ path('app_evento_detalle', {slug: evento.slug}) }}">Volver al evento</a>
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <h1 class="h3 mb-3">
+                Disponibilidad del evento
+            </h1>
+
+            <h2 class="h5 text-secondary mb-4">
+                {{ evento.titulo }}
+            </h2>
+
+            {% set cuposRestantes = max(0,
+                evento.capacidad - evento.usuarios|length
+            ) %}
+
+                {% if resumen.tieneCupos %}                <div class="alert alert-success">
+                    {{ mensaje }}
+                </div>
+            {% else %}
+                <div class="alert alert-danger">
+                    {{ mensaje }}
+                </div>
+            {% endif %}
+
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Capacidad máxima</th>
+                        <td>{{ evento.capacidad }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Personas inscriptas</th>
+                        <td>{{ resumen.inscriptos }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Cupos disponibles</th>
+                        <td>{{ resumen.disponibles }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
 {% endblock %}

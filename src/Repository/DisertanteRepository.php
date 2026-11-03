@@ -16,6 +16,13 @@ class DisertanteRepository extends ServiceEntityRepository
         parent::__construct($registry, Disertante::class);
     }
 
+    public function findDisertantesAlfabeticamente(): array
+    {
+        return $this->createQueryBuilder('d')
+            ->orderBy('d.nombre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
     //    /**
     //     * @return Disertante[] Returns an array of Disertante objects
     //     */
@@ -40,12 +47,4 @@ class DisertanteRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-
-    public function findDisertantesAlfabeticamente(): array
-    {
-        return $this->createQueryBuilder('d')
-            ->orderBy('d.nombre', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
 }

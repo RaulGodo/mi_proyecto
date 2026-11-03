@@ -1,28 +1,115 @@
-<h1>{{ evento.titulo }}</h1>
+{% extends 'frontend/layout.html.twig' %}
 
-<p>{{ evento.descripcion }}</p>
+{% block title %}{{ evento.titulo }}{% endblock %}
 
-<div>
-    <strong>Fecha:</strong>
-    {{ evento.fecha|date('d/m/Y') }}
-</div>
+{% block contenido %}
 
-<div>
-    <strong>Hora:</strong>
-    {{ evento.hora|date('H:i') }}
-    -
-    {{ evento.horaFinalizacion|date('H:i') }}
-</div>
+<section class="py-4">
 
-<div>
-    <strong>Idioma:</strong>
-    {{ evento.idioma }}
-</div>
-
-<div>
-    {% for disertante in evento.disertante %}
-    <a href="{{ path('app_disertantes') }}">
-        {{ disertante }}
+    <a href="{{ path('app_eventos') }}"
+       class="btn btn-outline-secondary mb-4">
+        ← Volver a eventos
     </a>
-{% endfor %}
-</div>
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <span class="badge bg-primary mb-3">
+                Evento
+            </span>
+
+            <h1 class="mb-4">
+                {{ evento.titulo }}
+            </h1>
+
+            <h2 class="h5">Descripción</h2>
+
+            <p class="text-secondary">
+                {{ evento.descripcion }}
+            </p>
+
+            <hr>
+
+            <h2 class="h5 mb-3">Información del evento</h2>
+
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th>Fecha</th>
+                        <td>{{ evento.fecha|date('d/m/Y') }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Horario</th>
+                        <td>
+                            {{ evento.hora|date('H:i') }}
+                            a
+                            {{ evento.horaFinalizacion|date('H:i') }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Duración</th>
+                        <td>{{ evento.duracion }} minutos</td>
+                    </tr>
+
+                    <tr>
+                        <th>Idioma</th>
+                        <td>{{ evento.idioma }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Capacidad</th>
+                        <td>{{ evento.capacidad }} personas</td>
+                    </tr>
+                </tbody>
+            </table>
+
+                      <hr>
+
+            <div class="mb-4">
+
+                <h2 class="h5 mb-3">Disponibilidad</h2>
+
+                <a href="{{ path('evento_disponibilidad', {
+                    'id': evento.id
+                }) }}"
+                   class="btn btn-success">
+                    Consultar disponibilidad
+                </a>
+
+            </div>
+
+            <hr>
+
+            <div class="mt-4">
+
+                <h2 class="h5 mb-3">Disertante</h2>
+
+                {% if evento.disertante %}
+
+                    <a href="{{ path('app_disertante_detalle', {
+                        'id': evento.disertante.id
+                    }) }}"
+                       class="btn btn-primary">
+
+                        {{ evento.disertante.nombreCompleto }}
+
+                    </a>
+
+                {% else %}
+
+                    <p class="text-muted">
+                        Sin disertante asignado.
+                    </p>
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

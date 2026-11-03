@@ -1,0 +1,30 @@
+{% extends 'admin/layout-admin.html.twig' %}
+
+{% block title %}Editar disertante{% endblock %}
+
+{% block body %}
+    <div class="mb-4">
+        <h1>Editar disertante</h1>
+
+        <p class="text-muted">
+            Modificá los datos de {{ disertante.nombreCompleto }}.
+        </p>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            {{ include('admin_disertante/_form.html.twig', {
+                'button_label': 'Guardar cambios'
+            }) }}
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-2 mt-3">
+        <a href="{{ path('app_admin_disertante_index') }}"
+           class="btn btn-secondary">
+            Volver al listado
+        </a>
+
+        {{ include('admin_disertante/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

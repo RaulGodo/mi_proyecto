@@ -1,63 +1,66 @@
 {% extends 'frontend/layout.html.twig' %}
 
-{% block title %}
-    Inicio
-{% endblock %}
-
 {% block contenido %}
 
-{% for mensaje in app.flashes('info') %}
-    <div class="alert alert-info">
-        {{ mensaje }}
-    </div>
-{% endfor %}
+    <div class="bg-light rounded-3 p-4 mb-4 shadow-sm">
+    <h1 class="display-6 fw-bold">
+        Bienvenidos a Gestión de Eventos
+    </h1>
 
+    <p class="lead text-secondary mb-0">
+        Descubrí conferencias, talleres y jornadas.
+        Conocé nuestras próximas actividades y encontrá
+        el evento que más te interese.
+    </p>
+</div>
 
-    <h2>Symfony 7.4 - Eventos</h2>
+    <section class="py-4">
 
-    <div class="row">
+        <h2 class="mb-4">Próximos eventos</h2>
 
-        <div class="col">
+        <div class="row g-4">
 
             {% for evento in eventosCol1 %}
-
-                {% include 'evento/_card.html.twig' with {
-                    evento: evento
-                } %}
-
-            {% else %}
-
-                <p>No hay eventos.</p>
-
+                <div class="col-12 col-md-6">
+                    {% include 'evento/_card.html.twig' with {
+                        evento: evento
+                    } %}
+                </div>
             {% endfor %}
-
-        </div>
-
-        <div class="col">
 
             {% for evento in eventosCol2 %}
-
-                {% include 'evento/_card.html.twig' with {
-                    evento: evento
-                } %}
-
-            {% else %}
-
-                <p>No hay eventos.</p>
-
+                <div class="col-12 col-md-6">
+                    {% include 'evento/_card.html.twig' with {
+                        evento: evento
+                    } %}
+                </div>
             {% endfor %}
 
         </div>
 
-    </div>
+    </section>
 
 {% endblock %}
 
 {% block lateral %}
 
-    <h4>Próximos eventos</h4>
+    <h3 class="h5 fw-bold mb-3">
+        ¿Falta algún evento?
+    </h3>
 
-    <p>Consultá el calendario completo de actividades.</p>
+    <p class="text-secondary">
+        Estamos preparando nuevas conferencias,
+        talleres y jornadas para nuestra comunidad.
+    </p>
+
+    <div class="alert alert-info mb-3" role="alert">
+        ¡Próximamente tendremos más actividades!
+    </div>
+
+    <a href="{{ path('app_eventos') }}"
+       class="btn btn-outline-primary w-100">
+        Ver todos los eventos
+    </a>
 
     {{ parent() }}
 

@@ -6,34 +6,34 @@
 
 {% block contenido %}
 
-<h2>Listado de Eventos</h2>
+    <section class="py-4">
 
-{% for evento in eventos %}
+        <h1 class="mb-4">Todos los eventos</h1>
 
-<div class="mb-4">
+        <div class="row g-4">
 
-    <strong>
-        {{ evento.hora|date('H:i') }}
-        -
-        {{ evento.horaFinalizacion|date('H:i') }}
-    </strong>
+            {% for evento in eventos %}
 
-    <br>
+                <div class="col-12 col-md-6">
 
-    <a href="{{ path('app_evento_detalle', {'slug': evento.slug}) }}">
-        {{ evento.titulo|title }}
-    </a>
+                    {% include 'evento/_card.html.twig' with {
+                        evento: evento
+                    } %}
 
-    <p>
-        {{ evento.descripcion|slice(0,150) }}...
-    </p>
+                </div>
 
-</div>
+            {% else %}
 
-{% else %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        No hay eventos disponibles.
+                    </div>
+                </div>
 
-    <p>No hay eventos disponibles.</p>
+            {% endfor %}
 
-{% endfor %}
+        </div>
+
+    </section>
 
 {% endblock %}

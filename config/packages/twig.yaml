@@ -1,6 +1,10 @@
 twig:
     file_name_pattern: '*.twig'
 
+    # Utilizar Bootstrap 5 en los formularios Symfony
+    form_themes:
+        - 'bootstrap_5_layout.html.twig'
+
 when@test:
     twig:
         strict_variables: true

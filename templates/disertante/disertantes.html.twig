@@ -1,71 +1,107 @@
-<h1>Disertantes</h1>
+{% extends 'frontend/layout.html.twig' %}
 
-{% for disertante in disertantes %}
+{% block title %}Disertantes{% endblock %}
 
-<div>
+{% block contenido %}
 
-    <h2>
-        <a href="{{ path('app_disertante_detalle', {
-            'id': disertante.id
-        }) }}">
-            {{ disertante.nombreCompleto }}
-        </a>
-    </h2>
+    <section class="py-4">
 
-    <p>{{ disertante.biografia }}</p>
+        <h1 class="mb-4">Nuestros disertantes</h1>
 
-    <p>
-        <strong>Imparte los siguientes eventos:</strong>
-    </p>
+        <div class="row g-4">
 
-    <ul>
+            {% for disertante in disertantes %}
 
-        {% for evento in disertante.eventos %}
+                <div class="col-12 col-md-6">
 
-            <li>
-                <a href="{{ path('app_evento_detalle', {
-                    'slug': evento.slug
-                }) }}">
-                    {{ evento.titulo }}
-                </a>
-            </li>
+                    <article class="card h-100 shadow-sm border-0">
 
-        {% else %}
+                        <div class="card-body">
 
-            <li>No imparte ningún evento</li>
+                            <span class="badge bg-primary mb-3">
+                                Disertante
+                            </span>
 
-        {% endfor %}
+                            <h2 class="card-title h5">
+                                {{ disertante.nombreCompleto }}
+                            </h2>
 
-    </ul>
+                            <p class="text-secondary">
+                                {{ disertante.especialidad ?? 'Sin especialidad' }}
+                            </p>
 
-</div>
+                            <p class="card-text">
+                                {{ disertante.biografia ?: 'Biografía no disponible.' }}
+                            </p>
 
-<div>
+                            <h3 class="h6 mt-4">
+                                Eventos que imparte
+                            </h3>
 
-    <p><strong>Más información</strong></p>
+                            <ul class="list-group list-group-flush mb-3">
 
-    <ul>
+                                {% for evento in disertante.eventos %}
+                                    <li class="list-group-item px-0">
+                                        <a href="{{ path('app_evento_detalle', {
+                                            'slug': evento.slug
+                                        }) }}">
+                                            {{ evento.titulo }}
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="list-group-item px-0 text-muted">
+                                        No imparte ningún evento.
+                                    </li>
+                                {% endfor %}
 
-        {% if disertante.twitter %}
-            <li>
-                <a href="{{ disertante.twitter }}">
-                    Twitter
-                </a>
-            </li>
-        {% endif %}
+                            </ul>
 
-        {% if disertante.linkedin %}
-            <li>
-                <a href="{{ disertante.linkedin }}">
-                    LinkedIn
-                </a>
-            </li>
-        {% endif %}
+                            {% if disertante.twitter or disertante.linkedin %}
+                                <p class="fw-semibold mb-2">
+                                    Más información
+                                </p>
 
-    </ul>
+                                {% if disertante.twitter %}
+                                    <a href="{{ disertante.twitter }}"
+                                       class="btn btn-outline-secondary btn-sm">
+                                        Twitter / X
+                                    </a>
+                                {% endif %}
 
-</div>
+                                {% if disertante.linkedin %}
+                                    <a href="{{ disertante.linkedin }}"
+                                       class="btn btn-outline-secondary btn-sm">
+                                        LinkedIn
+                                    </a>
+                                {% endif %}
+                            {% endif %}
 
-<hr>
+                        </div>
 
-{% endfor %}
+                        <div class="card-footer bg-white border-0 pb-3">
+                            <a href="{{ path('app_disertante_detalle', {
+                                'id': disertante.id
+                            }) }}" class="btn btn-primary w-100">
+                                Ver disertante
+                            </a>
+                        </div>
+
+                    </article>
+
+                </div>
+
+            {% else %}
+
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        No hay disertantes cargados.
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+{% endblock %}

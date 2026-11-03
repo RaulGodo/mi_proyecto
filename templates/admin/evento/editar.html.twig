@@ -1,0 +1,68 @@
+{% extends 'admin/layout-admin.html.twig' %}
+
+{% block title %}
+    Editar evento
+{% endblock %}
+
+{% block contenido %}
+
+    <h1 class="mb-4">Editar evento</h1>
+
+    <div class="card">
+
+        <div class="card-header bg-primary text-white">
+            <h2 class="h5 mb-0">
+                {{ evento.titulo }}
+            </h2>
+        </div>
+
+        <div class="card-body">
+
+            <p class="text-muted">
+                Modifique los datos del evento
+                y presione Guardar cambios.
+            </p>
+
+            {{ form_start(form) }}
+
+                {{ form_row(form.titulo) }}
+
+                {{ form_row(form.idioma) }}
+
+                {{ form_row(form.descripcion) }}
+
+                {{ form_row(form.fecha) }}
+
+                {{ form_row(form.hora) }}
+
+                {{ form_row(form.duracion) }}
+
+                {{ form_row(form.capacidad) }}
+
+                {{ form_row(form.disertante) }}
+
+                <div class="mt-4">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Guardar cambios
+                    </button>
+
+                    <a
+                        href="{{ path('admin_evento_listar') }}"
+                        class="btn btn-secondary"
+                    >
+                        Cancelar
+                    </a>
+
+                </div>
+
+            {{ form_end(form) }}
+
+        </div>
+
+    </div>
+
+{% endblock %}

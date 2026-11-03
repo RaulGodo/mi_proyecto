@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 abstract class AbstractAdminBaseController extends AbstractController
 {
@@ -27,7 +27,7 @@ abstract class AbstractAdminBaseController extends AbstractController
         $this->addFlash('success', $message);
     }
 
-    protected function redirectToAdmin(): Response
+    protected function redirectToAdmin(): RedirectResponse
     {
         return $this->redirectToRoute('admin_evento_listar');
     }

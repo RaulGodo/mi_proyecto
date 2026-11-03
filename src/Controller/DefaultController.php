@@ -2,13 +2,12 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Evento;
 use Doctrine\ORM\EntityManagerInterface;
 
-class DefaultController extends AbstractController
+class DefaultController extends AbstractBaseController
 {
     #[Route(
         '/sitio/{pagina}',
@@ -23,22 +22,14 @@ class DefaultController extends AbstractController
         return $this->render('estatica/' . $pagina . '.html.twig');
     }
 
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
     #[Route('/', name: 'app_portada')]
-    public function portada(): Response
+    public function portada(EntityManagerInterface $entityManager): Response
     {
-        $em = $this->entityManager;
-
-        $eventos = $em->getRepository(Evento::class)->findAll();
+        $eventos = $entityManager
+            ->getRepository(Evento::class)
+            ->findAll();
 
         shuffle($eventos);
-        // dump ($eventos); exit; // Verificar la estructura de los datos y asegurarse de que sean objetos Evento
 
         $eventos = array_slice($eventos, 0, 8);
 

@@ -1,29 +1,34 @@
-{% extends 'admin/evento/layout-admin.html.twig' %}
+{% extends 'admin/layout-admin.html.twig' %}
 
-{% block title %}Nuevo evento{% endblock %}
+{% block title %}
+    Nuevo evento
+{% endblock %}
 
-{% block contenido_admin %}
-
-<div class="mt-4">
+{% block contenido %}
 
     <h1>Nuevo evento</h1>
 
-    <p>Complete los datos para registrar un nuevo evento en el sistema.</p>
+    <p>
+        Complete los datos para registrar un nuevo evento.
+    </p>
 
-    {{ form_start(form) }}
+   {{ form_start(form) }}
+    {{ form_row(form.titulo) }}
+    {{ form_row(form.idioma) }}
+    {{ form_row(form.descripcion) }}
+    {{ form_row(form.fecha) }}
+    {{ form_row(form.hora) }}
+    {{ form_row(form.duracion) }}
+    {{ form_row(form.capacidad) }}
+    {{ form_row(form.disertante) }}
 
-        {{ form_widget(form) }}
+    <button type="submit" class="btn btn-primary">
+        Guardar evento
+    </button>
 
-        <button type="submit" class="btn btn-primary mt-3">
-            Guardar evento
-        </button>
-
-        <a href="{{ path('admin_evento_listar') }}" class="btn btn-secondary mt-3">
-            Cancelar
-        </a>
-
-    {{ form_end(form) }}
-
-</div>
+    <a href="{{ path('admin_evento_listar') }}" class="btn btn-secondary">
+        Cancelar
+    </a>
+{{ form_end(form) }}
 
 {% endblock %}

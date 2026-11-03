@@ -1,0 +1,87 @@
+{% extends 'admin/layout-admin.html.twig' %}
+
+{% block title %}Detalle del disertante{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Detalle del disertante</h1>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <h2 class="h5 mb-0">{{ disertante.nombreCompleto }}</h2>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th>ID</th>
+                            <td>{{ disertante.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Nombre completo</th>
+                            <td>{{ disertante.nombreCompleto }}</td>
+                        </tr>
+                        <tr>
+                            <th>Correo electrónico</th>
+                            <td>{{ disertante.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Especialidad</th>
+                            <td>{{ disertante.especialidad ?? 'Sin especialidad' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Teléfono</th>
+                            <td>{{ disertante.telefono ?: 'No informado' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Página web</th>
+                            <td>{{ disertante.url ?: 'No informada' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Twitter / X</th>
+                            <td>{{ disertante.twitter ?: 'No informado' }}</td>
+                        </tr>
+                        <tr>
+                            <th>LinkedIn</th>
+                            <td>{{ disertante.linkedin ?: 'No informado' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Biografía</th>
+                            <td>{{ disertante.biografia ?: 'Sin biografía' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Estado</th>
+                            <td>
+                                {% if disertante.activo %}
+                                    <span class="badge bg-success">Activo</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Inactivo</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Eventos asociados</th>
+                            <td>{{ disertante.eventos|length }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+        <a href="{{ path('app_admin_disertante_index') }}"
+           class="btn btn-secondary">
+            Volver al listado
+        </a>
+
+        <a href="{{ path('app_admin_disertante_edit', {
+            'id': disertante.id
+        }) }}" class="btn btn-warning">
+            Editar
+        </a>
+
+        {{ include('admin_disertante/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

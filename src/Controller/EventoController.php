@@ -2,32 +2,33 @@
 
 namespace App\Controller;
 
+use App\Repository\EventoRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Repository\EventoRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\EventoDisponibilidadService;
-use App\Entity\Evento;
+use App\Service\EventoResumenService;
 
-final class EventoController extends AbstractBaseController
+class EventoController extends AbstractBaseController
 {
-    #[Route('/evento', name: 'app_evento')]
+    #[Route('/eventos', name: 'app_eventos')]
     public function eventos(EventoRepository $repository): Response
     {
         $eventos = $repository->findEventosAlfabeticamente();
+
         return $this->render('evento/eventos.html.twig', [
-            'eventos' => $eventos
+            'eventos' => $eventos,
         ]);
     }
-
     #[Route('/evento/{slug}', name: 'app_evento_detalle')]
     public function evento(
         Request $request,
         EventoRepository $repository
     ): Response {
         $slug = $request->attributes->get('slug');
+
         $evento = $repository->findOneBy([
-            'slug' => $slug
+            'slug' => $slug,
         ]);
 
         if (!$evento) {
@@ -42,27 +43,42 @@ final class EventoController extends AbstractBaseController
                 $evento->getTitulo(),
                 date('H:i:s')
             )
+
         );
 
         return $this->render('evento/evento.html.twig', [
-            'evento' => $evento
+            'evento' => $evento,
         ]);
     }
-
-    #[Route('/evento/{id}/disponibilidad', name: 'evento_disponibilidad')]
+    #[Route(
+        '/evento/{id}/disponibilidad',
+        name: 'evento_disponibilidad',
+        requirements: ['id' => '\d+']
+    )]
+    #[Route(
+        '/evento/{id}/disponibilidad',
+        name: 'evento_disponibilidad',
+        requirements: ['id' => '\d+']
+    )]
     public function disponibilidad(
-        Evento $evento,
-        EventoDisponibilidadService $disponibilidadService
+        int $id,
+        EventoRepository $repository,
+        EventoResumenService $resumenService
     ): Response {
-        $mensaje = $disponibilidadService
-            ->obtenerMensaje($evento);
+        $evento = $repository->find($id);
 
-        return $this->render(
-            'evento/disponibilidad.html.twig',
-            [
-                'evento' => $evento,
-                'mensaje' => $mensaje,
-            ]
-        );
+        if (!$evento) {
+            throw $this->createNotFoundException(
+                'No existe el evento solicitado.'
+            );
+        }
+
+        $resumen = $resumenService->obtenerResumen($evento);
+
+        return $this->render('evento/disponibilidad.html.twig', [
+            'evento' => $evento,
+            'mensaje' => $resumen['mensaje'],
+            'resumen' => $resumen,
+        ]);
     }
 }

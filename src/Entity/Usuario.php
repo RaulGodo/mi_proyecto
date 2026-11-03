@@ -6,8 +6,9 @@ use App\Repository\UsuarioRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+
 
 #[ORM\Entity(repositoryClass: UsuarioRepository::class)]
 class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
@@ -35,24 +36,20 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $password = null;
-
-    /**
-     * @var list<string>
-     */
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
     /**
      * @var Collection<int, Evento>
      */
-    #[ORM\ManyToMany(targetEntity: Evento::class, inversedBy: 'usuarios')]
-    private Collection $evento;
+    #[ORM\ManyToMany(targetEntity: Evento::class, mappedBy: 'usuarios')]
+    private Collection $eventos;
 
     public function __construct()
     {
-        $this->evento = new ArrayCollection();
+        $this->eventos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,52 +142,21 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * Identificador visible del usuario (el que se usa para el login).
-     */
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
-    }
-
-    /**
-     * @return list<string>
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // todo usuario tiene al menos ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    /**
-     * @param list<string> $roles
-     */
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
-    public function eraseCredentials(): void
-    {
-        // Si guardaras datos temporales sensibles, se limpian acá.
-    }
-
-    /**
      * @return Collection<int, Evento>
      */
-    public function getEvento(): Collection
+    public function getEventos(): Collection
     {
-        return $this->evento;
+        return $this->eventos;
     }
 
     public function addEvento(Evento $evento): static
     {
-        if (!$this->evento->contains($evento)) {
-            $this->evento->add($evento);
+        if (!$this->eventos->contains($evento)) {
+            $this->eventos->add($evento);
+
+            if (!$evento->getUsuarios()->contains($this)) {
+                $evento->addUsuario($this);
+            }
         }
 
         return $this;
@@ -198,8 +164,34 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeEvento(Evento $evento): static
     {
-        $this->evento->removeElement($evento);
+        if ($this->eventos->removeElement($evento)) {
+            if ($evento->getUsuarios()->contains($this)) {
+                $evento->removeUsuario($this);
+            }
+        }
 
         return $this;
     }
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    public function eraseCredentials(): void {}
 }

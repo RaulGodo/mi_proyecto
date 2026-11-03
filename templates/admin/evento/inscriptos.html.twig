@@ -1,90 +1,75 @@
-{% extends 'admin/evento/layout-admin.html.twig' %}
+{% extends 'admin/layout-admin.html.twig' %}
 
-{% block title %}
-    Inscriptos
-{% endblock %}
+{% block title %}Inscriptos del evento{% endblock %}
 
-{% block contenido_admin %}
+{% block contenido %}
 
-<div class="mt-4">
+    <section class="py-4">
 
-    <h1>
-        👥 Inscriptos al Evento
-    </h1>
+        <a href="{{ path('admin_evento_listar') }}"
+           class="btn btn-outline-secondary mb-4">
+            ← Volver a eventos
+        </a>
 
-    <h4>
-        {{ evento.titulo }}
-    </h4>
+        <div class="card shadow-sm border-0">
 
-<p>
-    <strong>Idioma:</strong> {{ evento.idioma }}
-</p>
+            <div class="card-body p-4">
 
-<a href="{{ path('admin_evento_listar') }}" class="btn btn-secondary mb-3">
-    ⬅ Volver al Panel de administracion
-</a>
+                <h1 class="h3 mb-3">
+                    Inscriptos del evento
+                </h1>
 
-<div class="alert alert-info">
-    <strong>Total de inscriptos:</strong> {{ evento.usuarios|length }}
-</div>
+                <h2 class="h5 text-secondary mb-4">
+                    {{ evento.titulo }}
+                </h2>
 
-    <hr>
+                <div class="alert alert-info">
+                    <strong>Total de inscriptos:</strong>
+                    {{ evento.usuarios|length }}
+                </div>
 
-    <table class="table table-bordered table-striped">
+                <div class="table-responsive">
 
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>DNI</th>
-            <th>Nombre</th>
-            <th>Teléfono</th>
-            <th>Email</th>
-        </tr>
-        </thead>
+                    <table class="table table-bordered table-striped">
 
-        <tbody>
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Correo electrónico</th>
+                            </tr>
+                        </thead>
 
-        {% for usuario in evento.usuarios %}
+                        <tbody>
 
-            <tr>
+                            {% for usuario in evento.usuarios %}
 
-                <td>
-                    {{ loop.index }}
-                </td>
+                                <tr>
+                                    <td>{{ usuario.nombre }}</td>
+                                    <td>{{ usuario.apellido }}</td>
+                                    <td>{{ usuario.email }}</td>
+                                </tr>
 
-                <td>
-                    {{ usuario.dni }}
-                </td>
+                            {% else %}
 
-                <td>
-                    {{ usuario.nombre }}
-                    {{ usuario.apellido }}
-                </td>
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted">
+                                        Este evento no tiene inscriptos.
+                                    </td>
+                                </tr>
 
-                <td>
-                    {{ usuario.telefono }}
-                </td>
+                            {% endfor %}
 
-                <td>
-                    {{ usuario.email }}
-                </td>
+                        </tbody>
 
-            </tr>
+                    </table>
 
-        {% else %}
+                </div>
 
-            <tr>
-                <td colspan="5">
-                    No hay usuarios inscriptos.
-                </td>
-            </tr>
+            </div>
 
-        {% endfor %}
+        </div>
 
-        </tbody>
-
-    </table>
-
-</div>
+    </section>
 
 {% endblock %}

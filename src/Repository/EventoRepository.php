@@ -16,6 +16,13 @@ class EventoRepository extends ServiceEntityRepository
         parent::__construct($registry, Evento::class);
     }
 
+    public function findEventosAlfabeticamente(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.titulo', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
     //    /**
     //     * @return Evento[] Returns an array of Evento objects
     //     */
@@ -40,11 +47,4 @@ class EventoRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-    public function findEventosAlfabeticamente(): array
-    {
-        return $this->createQueryBuilder('e')
-            ->orderBy('e.titulo', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
 }

@@ -1,0 +1,26 @@
+{% extends 'admin/layout-admin.html.twig' %}
+
+{% block title %}Nuevo disertante{% endblock %}
+
+{% block body %}
+    <div class="mb-4">
+        <h1>Registrar nuevo disertante</h1>
+        <p class="text-muted">
+            Completá los datos del disertante.
+            Los campos obligatorios deben estar completos.
+        </p>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            {{ include('admin_disertante/_form.html.twig', {
+                'button_label': 'Guardar disertante'
+            }) }}
+        </div>
+    </div>
+
+    <a href="{{ path('app_admin_disertante_index') }}"
+       class="btn btn-secondary mt-3">
+        Volver al listado
+    </a>
+{% endblock %}

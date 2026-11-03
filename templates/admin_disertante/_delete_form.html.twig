@@ -1,0 +1,15 @@
+{% set estaEnListado = app.request.attributes.get('_route') == 'app_admin_disertante_index' %}
+
+<form method="post"
+      action="{{ path('app_admin_disertante_delete', {'id': disertante.id}) }}"
+      onsubmit="return confirm('¿Estás seguro de que querés eliminar este disertante?');"
+      class="{{ estaEnListado ? 'd-inline' : '' }}">
+
+    <input type="hidden"
+           name="_token"
+           value="{{ csrf_token('delete' ~ disertante.id) }}">
+
+    <button class="btn btn-sm btn-danger">
+        Eliminar
+    </button>
+</form>

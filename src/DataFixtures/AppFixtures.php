@@ -2,493 +2,109 @@
 
 namespace App\DataFixtures;
 
-
 use App\Entity\Disertante;
 use App\Entity\Evento;
 use App\Entity\Usuario;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-    public function __construct(
-        private UserPasswordHasherInterface $passwordHasher
-    ) {}
-
     public function load(ObjectManager $manager): void
     {
-        $nombres = [
-            'Martina',
-            'Adolfo',
-            'Agustin',
-            'Felipe',
-            'Alberto',
-            'Andrés',
-            'Ariel',
-            'Benjamin',
-            'Matias',
-            'Diego',
-            'Carlos',
-            'Pablo',
-            'Cristian',
-            'Luis',
-            'David',
-            'Belén',
-            'Eduardo',
-            'Antonela',
-            'Fernando',
-            'Francisco',
-            'Gonzalo',
-            'Constanza',
-            'Guillermo',
-            'Sofia',
-            'Pia',
-            'Ignacio',
-            'Evangelina',
-            'Julieta',
-            'Laura',
-            'Iván',
-            'Julian',
-            'Emilia',
-            'Jorge',
-            'Jose',
-            'Juan',
-            'Gaspar',
-            'Marta',
-            'Miguel',
-            'Rodrigo',
-            'Mateo',
-            'Oscar',
-            'Pedro',
-            'Josefina',
-            'Rafael',
-            'Renata',
-            'Rubén',
-            'Salvador',
-            'Santiago',
-            'Sergio',
-            'Susana',
-            'Verónica',
-            'Vicente',
-            'Víctor',
-            'Victoria',
-            'Paula',
-            'Alejandro',
-            'Javier',
-            'Tomás',
-            'Romina',
-            'Lorena',
-            'Gabriel',
-            'Juan Pablo',
-            'Omar',
-            'Julia'
-        ];
+        // Disertantes
+        $disertante1 = new Disertante();
+        $disertante1
+            ->setNombre('Juan')
+            ->setApellido('Pérez')
+            ->setTelefono('3511111111')
+            ->setUrl('https://example.com/juan')
+            ->setEmail('juan@example.com')
+            ->setTwitter('https://twitter.com/juan')
+            ->setLinkedin('https://linkedin.com/in/juan')
+            ->setBiografia('Especialista en desarrollo web y Symfony.');
 
-        $apellidos = [
-            'González',
-            'Rodríguez',
-            'Gómez',
-            'Fernández',
-            'Martínez',
-            'Pérez',
-            'García',
-            'Sánchez',
-            'Romero',
-            'Sosa',
-            'Álvarez',
-            'Torres',
-            'Ruiz',
-            'Ramírez',
-            'Flores',
-            'Acosta',
-            'Benítez',
-            'Medina',
-            'Suárez',
-            'Herrera',
-            'Aguirre',
-            'Gutiérrez',
-            'Giménez',
-            'Molina',
-            'Silva',
-            'Castro',
-            'Rojas',
-            'Ortíz',
-            'Núñez',
-            'Luna',
-            'Juárez',
-            'Cabrera',
-            'Ríos',
-            'Ferreyra',
-            'Godoy',
-            'Morales',
-            'Domínguez',
-            'Moreno',
-            'Peralta',
-            'Vega',
-            'Carrizo',
-            'Quiroga',
-            'Castillo',
-            'Ledesma',
-            'Muñoz',
-            'Ojeda',
-            'Ponce',
-            'Vera',
-            'Vázquez',
-            'Villalba',
-            'Cardozo',
-            'Navarro',
-            'Ramos',
-            'Arias',
-            'Coronel',
-            'Córdoba',
-            'Figueroa',
-            'Correa',
-            'Cáceres',
-            'Vargas',
-            'Maldonado',
-            'Mansilla',
-            'Farías',
-            'Rivero',
-            'Paz',
-            'Miranda',
-            'Roldán',
-            'Méndez',
-            'Lucero',
-            'Cruz',
-            'Hernández',
-            'Agüero',
-            'Páez',
-            'Blanco',
-            'Mendoza',
-            'Barrios',
-            'Escobar',
-            'Ávila',
-            'Soria',
-            'Leiva',
-            'Acuña',
-            'Martin',
-            'Maidana',
-            'Moyano',
-            'Campos',
-            'Olivera',
-            'Duarte',
-            'Soto',
-            'Franco',
-            'Bravo',
-            'Valdéz',
-            'Toledo',
-            'Montenegro',
-            'Leguizamón',
-            'Chávez',
-            'Arce',
-            'López',
-            'Díaz'
-        ];
+        $disertante2 = new Disertante();
+        $disertante2
+            ->setNombre('María')
+            ->setApellido('Gómez')
+            ->setTelefono('3512222222')
+            ->setUrl('https://example.com/maria')
+            ->setEmail('maria@example.com')
+            ->setTwitter('https://twitter.com/maria')
+            ->setLinkedin('https://linkedin.com/in/maria')
+            ->setBiografia('Especialista en bases de datos y Doctrine ORM.');
 
-        $calles = [
-            '9 de Julio',
-            '4 de Enero',
-            'San Jerónimo',
-            '1 de Mayo',
-            'Córdoba',
-            'Corrientes',
-            'Moreno',
-            'San Martin',
-            'Entre Rios',
-            'San Lorenzo',
-            'Urquiza',
-            'La Rioja',
-            'Salta',
-            'Mendoza',
-            'Cruz Roja',
-            'Suipacha',
-            'Mariano Comas',
-            'Iturraspe',
-            'Maipú',
-            'Zenteno',
-            'Junin',
-            'Santiago del Estero',
-            'Rivadavia',
-            'Las Heras',
-            'Francia',
-            'Alvear',
-            'Mitre',
-            'Lavalle',
-            'Primera Junta',
-            'Juan de Garay',
-            'Candioti',
-            'Necochea',
-            'Gral. Paz',
-            'Pedro Ferre',
-            'Saavedra',
-            'Catamarca',
-            'Tucumán'
-        ];
+        $manager->persist($disertante1);
+        $manager->persist($disertante2);
 
-        $emails = [
-            'gmail.com',
-            'hotmail.com',
-            'yahoo.com',
-            'outlook.com'
-        ];
+        // Eventos
+        $evento1 = new Evento();
+        $evento1
+            ->setTitulo('Introducción a Symfony 7')
+            ->setSlug('introduccion-symfony-7')
+            ->setIdioma('Español')
+            ->setDescripcion('Introducción al desarrollo web con Symfony 7.')
+            ->setFecha(new \DateTime('2026-09-10'))
+            ->setHora(new \DateTime('18:00'))
+            ->setDuracion(90)
+            ->setCapacidad(100)
+            ->setDisertante($disertante1);
+        $evento2 = new Evento();
+        $evento2
+            ->setTitulo('Doctrine ORM en Symfony')
+            ->setSlug('doctrine-orm-symfony')
+            ->setIdioma('Español')
+            ->setDescripcion('Relaciones, repositorios y consultas con Doctrine ORM.')
+            ->setFecha(new \DateTime('2026-09-12'))
+            ->setHora(new \DateTime('19:00'))
+            ->setDuracion(120)
+            ->setCapacidad(80)
+            ->setDisertante($disertante2);
+        $evento3 = new Evento();
+        $evento3
+            ->setTitulo('Twig desde cero')
+            ->setSlug('twig-desde-cero')
+            ->setIdioma('Español')
+            ->setDescripcion('Creación de vistas dinámicas utilizando Twig.')
+            ->setFecha(new \DateTime('2026-09-15'))
+            ->setHora(new \DateTime('17:30'))
+            ->setDuracion(60)
+            ->setCapacidad(60)
+            ->setDisertante($disertante1);
+        $manager->persist($evento1);
+        $manager->persist($evento2);
+        $manager->persist($evento3);
 
-        /*
-         * ============================================================
-         * DISERTANTES
-         * ============================================================
-         */
+        // Usuarios
+        $usuario1 = new Usuario();
+        $usuario1
+            ->setNombre('Ana')
+            ->setApellido('López')
+            ->setDni('30111222')
+            ->setDireccion('Av. Siempre Viva 123')
+            ->setTelefono('3513333333')
+            ->setEmail('ana@example.com')
+            ->setPassword('123456');
 
-        $disertantes = [
-            [
-                'ref' => 'javierLopez',
-                'nombre' => 'Javier',
-                'apellidos' => 'López',
-                'email' => 'javier.lopez@gmail.com'
-            ],
-            [
-                'ref' => 'ignacioBlanco',
-                'nombre' => 'Ignacio',
-                'apellidos' => 'Blanco',
-                'email' => 'ignacio.blanco@gmail.com'
-            ],
-            [
-                'ref' => 'marcosRojas',
-                'nombre' => 'Marcos',
-                'apellidos' => 'Rojas',
-                'email' => 'marcos.rojas@gmail.com'
-            ],
-            [
-                'ref' => 'antonelaToledo',
-                'nombre' => 'Antonela',
-                'apellidos' => 'Toledo',
-                'email' => 'antonela.toledo@gmail.com'
-            ],
-        ];
+        $usuario2 = new Usuario();
+        $usuario2
+            ->setNombre('Carlos')
+            ->setApellido('Martínez')
+            ->setDni('32444555')
+            ->setDireccion('San Martín 456')
+            ->setTelefono('3514444444')
+            ->setEmail('carlos@example.com')
+            ->setPassword('123456');
 
-        foreach ($disertantes as $datos) {
+        $manager->persist($usuario1);
+        $manager->persist($usuario2);
 
-            $disertante = new Disertante();
-
-            $disertante->setNombre($datos['nombre']);
-            $disertante->setApellido($datos['apellidos']);
-            $disertante->setEmail($datos['email']);
-
-            $disertante->setBiografia(
-                'Especialista en desarrollo de aplicaciones web con Symfony 7.4.'
-            );
-
-            $disertante->setTelefono(
-                '0342-' . rand(4000000, 4999999)
-            );
-
-            $disertante->setDireccion(
-                $calles[array_rand($calles)] . ' ' . rand(100, 4000)
-            );
-
-            $disertante->setUrl('https://www.symfony.com');
-
-            $disertante->setLinkedin('https://linkedin.com');
-
-            $disertante->setTwitter('https://x.com');
-
-            $manager->persist($disertante);
-
-            $this->addReference(
-                $datos['ref'],
-                $disertante
-            );
-        }
+        // Inscripciones
+        $evento1->addUsuario($usuario1);
+        $evento1->addUsuario($usuario2);
+        $evento2->addUsuario($usuario1);
 
         $manager->flush();
-
-        /*
-         * ============================================================
-         * USUARIOS
-         * ============================================================
-         */
-
-        foreach (range(1, 200) as $i) {
-
-            $usuario = new Usuario();
-
-            $usuario->setNombre(
-                $nombres[array_rand($nombres)]
-            );
-
-            $usuario->setApellido(
-                $apellidos[array_rand($apellidos)]
-            );
-
-            $usuario->setDni(
-                (string) rand(20000000, 45000000)
-            );
-
-            $usuario->setDireccion(
-                $calles[array_rand($calles)] . ' ' . rand(100, 4000)
-            );
-
-            $usuario->setTelefono(
-                '0342-' . rand(4000000, 4999999)
-            );
-
-            $usuario->setEmail(
-                'usuario' . $i . '@' . $emails[array_rand($emails)]
-            );
-
-            $passwordPlano = 'usuario' . $i;
-
-            // $passwordHash = $this->passwordHasher->hashPassword(
-            //     $usuario,
-            //     $passwordPlano
-            // );
-
-            // $usuario->setPassword($passwordHash);
-
-            $manager->persist($usuario);
-        }
-
-        $manager->flush();
-
-        /*
-         * ============================================================
-         * EVENTOS
-         * ============================================================
-         */
-
-        $eventos = [
-            [
-                'titulo' => 'Introducción a Symfony 7.4',
-                'hora' => '09:00:00',
-                'disertante' => 'javierLopez'
-            ],
-            [
-                'titulo' => 'Ruteo y Controladores',
-                'hora' => '10:30:00',
-                'disertante' => 'ignacioBlanco'
-            ],
-            [
-                'titulo' => 'Doctrine ORM y Base de Datos',
-                'hora' => '12:00:00',
-                'disertante' => 'marcosRojas'
-            ],
-            [
-                'titulo' => 'Twig y Formularios',
-                'hora' => '15:00:00',
-                'disertante' => 'antonelaToledo'
-            ],
-            [
-                'titulo' => 'Seguridad en Symfony 7.4',
-                'hora' => '16:30:00',
-                'disertante' => 'javierLopez'
-            ],
-            [
-                'titulo' => 'Introducción a Symfony 8.4',
-                'hora' => '09:00:00',
-                'disertante' => 'javierLopez'
-            ],
-            [
-                'titulo' => 'Ruteo y programacion',
-                'hora' => '10:30:00',
-                'disertante' => 'ignacioBlanco'
-            ],
-            [
-                'titulo' => 'Doctrine ORM y Base de Datos 2',
-                'hora' => '12:00:00',
-                'disertante' => 'marcosRojas'
-            ],
-            [
-                'titulo' => 'Twig y Formularios 5',
-                'hora' => '15:00:00',
-                'disertante' => 'antonelaToledo'
-            ],
-            [
-                'titulo' => 'Seguridad en Symfony 10',
-                'hora' => '16:30:00',
-                'disertante' => 'javierLopez'
-            ],
-        ];
-
-        foreach ($eventos as $datosEvento) {
-
-            $evento = new Evento();
-
-            $evento->setTitulo(
-                $datosEvento['titulo']
-            );
-
-            $evento->setDescripcion(
-                'Evento académico orientado al desarrollo de aplicaciones web modernas utilizando Symfony 7.4.'
-            );
-
-            $evento->setCapacidad(100);
-
-            $evento->setFecha(
-                new \DateTime('2026-06-10')
-            );
-
-            $evento->setHora(
-                new \DateTime($datosEvento['hora'])
-            );
-
-            $evento->setDuracion(60);
-
-            $evento->setIdioma('es');
-
-            $evento->addDisertante(
-                $this->getReference(
-                    $datosEvento['disertante'],
-                    Disertante::class
-                )
-            );
-
-            $evento->setEstado(
-                match (rand(1, 3)) {
-                    1 => 'Activo',
-                    2 => 'Cancelado',
-                    3 => 'Finalizado'
-                }
-            );
-
-            $this->addUsuarios(
-                $manager,
-                $evento
-            );
-
-            $manager->persist($evento);
-        }
-
-        $manager->flush();
-    }
-
-    /**
-     * Agrega asistentes aleatorios al evento.
-     */
-    private function addUsuarios(
-        ObjectManager $manager,
-        Evento $evento,
-        ?int $cantidad = null
-    ): void {
-
-        $usuarios = $manager
-            ->getRepository(Usuario::class)
-            ->findAll();
-
-        $cantidad ??= rand(20, 50);
-
-        $ids = [];
-
-        for ($i = 0; $i < $cantidad; $i++) {
-
-            $usuario = $usuarios[array_rand($usuarios)];
-
-            while (in_array($usuario->getId(), $ids)) {
-                $usuario = $usuarios[array_rand($usuarios)];
-            }
-
-            $ids[] = $usuario->getId();
-
-            $evento->addUsuario($usuario);
-        }
     }
 }
